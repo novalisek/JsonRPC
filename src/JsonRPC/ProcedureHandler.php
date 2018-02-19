@@ -48,6 +48,37 @@ class ProcedureHandler
      */
     protected $beforeMethodName = '';
 
+     /**
+     * Check minimum argument count
+     *
+     * @access protected
+     * @var boolean
+     */
+    protected $checkMinArgCount = true;
+
+     /**
+     * Check maximum argument count
+     *
+     * @access protected
+     * @var boolean
+     */
+    protected $checkMaxArgCount = true;
+
+    /**
+     * Set if argument count should be checked
+     *
+     * @access public
+     * @param  boolean  $checkMin       Check minimum count
+     * @param  boolean  $checkMax       Check maximum count
+     * @return $this
+     */    
+    public function setCheckArgumentsCount($checkMin,$checkMax)
+    {
+     $this->checkMinArgCount=$checkMin;
+     $this->checkMaxArgCount=$checkMax;
+     return $this;
+    }
+    
     /**
      * Register a new procedure
      *
@@ -208,11 +239,11 @@ class ProcedureHandler
     {
         $nbParams = count($requestParams);
 
-        if ($nbParams < $nbRequiredParams) {
+        if (($this->checkMinArgCount) && ($nbParams < $nbRequiredParams)) {
             throw new InvalidArgumentException('Wrong number of arguments');
         }
 
-        if ($nbParams > $nbMaxParams) {
+        if (($this->checkMaxArgCount) && ($nbParams > $nbMaxParams)) {
             throw new InvalidArgumentException('Too many arguments');
         }
 
